@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:meditation_app/constants.dart';
 import 'package:meditation_app/widgets/bottom_nav_bar.dart';
 import 'package:meditation_app/widgets/search_bar.dart' as custom_search_bar;
+import 'package:meditation_app/screens/meditation_session_screen.dart'; // ✅ Import added
 
 class DetailsScreen extends StatelessWidget {
   const DetailsScreen({super.key});
@@ -31,9 +32,7 @@ class DetailsScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    SizedBox(
-                      height: size.height * 0.05,
-                    ),
+                    SizedBox(height: size.height * 0.05),
                     Text(
                       "Meditation",
                       style: Theme.of(context)
@@ -60,33 +59,25 @@ class DetailsScreen extends StatelessWidget {
                     Wrap(
                       spacing: 20,
                       runSpacing: 20,
-                      children: <Widget>[
-                        SeassionCard(
-                          seassionNum: 1,
-                          isDone: true,
-                          press: () {}, key: UniqueKey(),
-                        ),
-                        SeassionCard(
-                          seassionNum: 2,
-                          press: () {}, key: UniqueKey(),
-                        ),
-                        SeassionCard(
-                          seassionNum: 3,
-                          press: () {}, key: UniqueKey(),
-                        ),
-                        SeassionCard(
-                          seassionNum: 4,
-                          press: () {}, key: UniqueKey(),
-                        ),
-                        SeassionCard(
-                          seassionNum: 5,
-                          press: () {}, key: UniqueKey(),
-                        ),
-                        SeassionCard(
-                          seassionNum: 6,
-                          press: () {}, key: UniqueKey(),
-                        ),
-                      ],
+                      children: List.generate(6, (index) {
+                        int sessionNum = index + 1;
+                        return SeassionCard(
+                          key: UniqueKey(),
+                          seassionNum: sessionNum,
+                          isDone: sessionNum == 1, // First session marked done
+                          press: () {
+                            // ✅ Navigate to the actual session screen
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => MeditationSessionScreen(
+                                  sessionNum: sessionNum,
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      }),
                     ),
                     const SizedBox(height: 20),
                     Text(
@@ -127,7 +118,7 @@ class DetailsScreen extends StatelessWidget {
                                   "Basic 2",
                                   style: Theme.of(context).textTheme.titleMedium,
                                 ),
-                                const Text("Start your deepen you practice")
+                                const Text("Start to deepen your practice")
                               ],
                             ),
                           ),
@@ -166,9 +157,7 @@ class SeassionCard extends StatelessWidget {
       return ClipRRect(
         borderRadius: BorderRadius.circular(13),
         child: Container(
-          width: constraint.maxWidth / 2 -
-              10, // constraint.maxWidth provide us the available with for this widget
-          // padding: EdgeInsets.all(16),
+          width: constraint.maxWidth / 2 - 10,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(13),
@@ -206,7 +195,7 @@ class SeassionCard extends StatelessWidget {
                     Text(
                       "Session $seassionNum",
                       style: Theme.of(context).textTheme.titleMedium,
-                    )
+                    ),
                   ],
                 ),
               ),
