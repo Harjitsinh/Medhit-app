@@ -8,6 +8,10 @@ import 'package:meditation_app/screens/yoga_screen.dart';
 import 'package:meditation_app/widgets/bottom_nav_bar.dart';
 import 'package:meditation_app/widgets/category_card.dart';
 import 'package:meditation_app/widgets/search_bar.dart' as custom_search_bar;
+import 'package:meditation_app/screens/settings_screen.dart';
+
+// ----------------- THEME NOTIFIER ----------------
+ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.light);
 
 void main() => runApp(const MyApp());
 
@@ -16,15 +20,28 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Meditation App',
-      theme: ThemeData(
-        fontFamily: "Cairo",
-        scaffoldBackgroundColor: kBackgroundColor,
-        textTheme: Theme.of(context).textTheme.apply(displayColor: kTextColor),
-      ),
-      home: const HomeScreen(),
+    return ValueListenableBuilder<ThemeMode>(
+      valueListenable: themeNotifier,
+      builder: (_, ThemeMode currentMode, __) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Meditation App',
+          theme: ThemeData(
+            fontFamily: "Cairo",
+            scaffoldBackgroundColor: kBackgroundColor,
+            textTheme: Theme.of(context).textTheme.apply(displayColor: kTextColor),
+            brightness: Brightness.light,
+          ),
+          darkTheme: ThemeData(
+            fontFamily: "Cairo",
+            scaffoldBackgroundColor: Colors.black,
+            textTheme: Theme.of(context).textTheme.apply(displayColor: Colors.white),
+            brightness: Brightness.dark,
+          ),
+          themeMode: currentMode,
+          home: const HomeScreen(),
+        );
+      },
     );
   }
 }
@@ -57,18 +74,26 @@ class HomeScreen extends StatelessWidget {
                 children: <Widget>[
                   Align(
                     alignment: Alignment.topRight,
-                    child: Container(
-                      alignment: Alignment.center,
-                      height: 52,
-                      width: 52,
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFF2BEA1),
-                        shape: BoxShape.circle,
-                      ),
-                      child: SvgPicture.asset(
-                        "assets/icons/menu.svg",
-                        width: 24,
-                        height: 24,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const SettingsScreen()),
+                        );
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        height: 52,
+                        width: 52,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFF2BEA1),
+                          shape: BoxShape.circle,
+                        ),
+                        child: SvgPicture.asset(
+                          "assets/icons/menu.svg",
+                          width: 24,
+                          height: 24,
+                        ),
                       ),
                     ),
                   ),
@@ -100,7 +125,7 @@ class HomeScreen extends StatelessWidget {
                         ),
                         CategoryCard(
                           title: "Kegel Exercises",
-                          svgSrc: "assets/icons/kegel_icon.svg", // fixed
+                          svgSrc: "assets/icons/kegel_icon.svg",
                           press: () {
                             Navigator.push(
                               context,

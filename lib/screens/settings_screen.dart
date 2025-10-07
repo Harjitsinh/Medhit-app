@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:meditation_app/constants.dart';
+import 'package:meditation_app/main.dart'; // for themeNotifier
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
@@ -14,6 +17,15 @@ class SettingsScreen extends StatelessWidget {
       ),
       body: ListView(
         children: [
+          SwitchListTile(
+            title: const Text("Dark Mode"),
+            value: themeNotifier.value == ThemeMode.dark,
+            onChanged: (val) {
+              themeNotifier.value =
+                  val ? ThemeMode.dark : ThemeMode.light;
+            },
+            secondary: Icon(Icons.dark_mode, color: isDarkMode ? Colors.white : Colors.black),
+          ),
           ListTile(
             leading: const Icon(Icons.person),
             title: const Text('Account'),
@@ -70,16 +82,21 @@ class AccountScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      appBar: AppBar(title: const Text("Account"), backgroundColor: kBlueLightColor),
-      body: const Padding(
-        padding: EdgeInsets.all(16.0),
+      appBar: AppBar(
+        title: const Text("Account"),
+        backgroundColor: kBlueLightColor,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Text(
           "Manage your account details here.\n\n"
           "• Update your profile\n"
           "• Change preferences\n"
           "• View app usage",
-          style: TextStyle(fontSize: 16),
+          style: TextStyle(fontSize: 16, color: isDarkMode ? Colors.white : Colors.black),
         ),
       ),
     );
@@ -101,8 +118,12 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
-      appBar: AppBar(title: const Text("Notifications"), backgroundColor: kBlueLightColor),
+      appBar: AppBar(
+        title: const Text("Notifications"),
+        backgroundColor: kBlueLightColor,
+      ),
       body: ListView(
         children: [
           SwitchListTile(
@@ -148,7 +169,10 @@ class _PrivacyScreenState extends State<PrivacyScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Privacy"), backgroundColor: kBlueLightColor),
+      appBar: AppBar(
+        title: const Text("Privacy"),
+        backgroundColor: kBlueLightColor,
+      ),
       body: ListView(
         children: [
           SwitchListTile(
@@ -184,16 +208,21 @@ class HelpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      appBar: AppBar(title: const Text("Help"), backgroundColor: kBlueLightColor),
-      body: const Padding(
-        padding: EdgeInsets.all(16.0),
+      appBar: AppBar(
+        title: const Text("Help"),
+        backgroundColor: kBlueLightColor,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Text(
           "Need help? Find answers here:\n\n"
           "• FAQs\n"
-          "• Contact support\n"
-          "• App tutorials",
-          style: TextStyle(fontSize: 16),
+          "• Contact support,\n"
+          "     email - harjitsinh.raol701@gmail.com",
+          style: TextStyle(fontSize: 16, color: isDarkMode ? Colors.white : Colors.black),
         ),
       ),
     );
